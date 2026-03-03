@@ -1,0 +1,198 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local Camera = workspace.CurrentCamera
+
+-- =========================================================
+-- BANCO DE DADOS DE KEYS (20 KEYS)
+-- =========================================================
+local KeysValidas = {
+    ["KEY-THZIN-FREE-17386"] = true, ["KEY-THZIN-FREE-99210"] = true,
+    ["KEY-THZIN-FREE-44562"] = true, ["KEY-THZIN-FREE-11029"] = true,
+    ["KEY-THZIN-FREE-88731"] = true, ["KEY-THZIN-FREE-55420"] = true,
+    ["KEY-THZIN-FREE-33219"] = true, ["KEY-THZIN-FREE-77612"] = true,
+    ["KEY-THZIN-FREE-10045"] = true, ["KEY-THZIN-FREE-66543"] = true,
+    ["KEY-THZIN-FREE-22987"] = true, ["KEY-THZIN-FREE-44112"] = true,
+    ["KEY-THZIN-FREE-90034"] = true, ["KEY-THZIN-FREE-12345"] = true,
+    ["KEY-THZIN-FREE-88009"] = true, ["KEY-THZIN-FREE-54321"] = true,
+    ["KEY-THZIN-FREE-77123"] = true, ["KEY-THZIN-FREE-99887"] = true,
+    ["KEY-THZIN-FREE-11223"] = true, ["KEY-THZIN-FREE-66778"] = true
+}
+
+-- Limpeza
+if PlayerGui:FindFirstChild("PvP_Ultra_V6") then PlayerGui.PvP_Ultra_V6:Destroy() end
+
+local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+ScreenGui.Name = "PvP_Ultra_V6"
+ScreenGui.ResetOnSpawn = false
+
+-- --- TELA DE LOGIN ---
+local LoginFrame = Instance.new("Frame", ScreenGui)
+LoginFrame.Size = UDim2.new(0, 280, 0, 180)
+LoginFrame.Position = UDim2.new(0.5, -140, 0.4, 0)
+LoginFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+LoginFrame.BorderSizePixel = 0
+Instance.new("UICorner", LoginFrame).CornerRadius = UDim.new(0, 10)
+
+local LTitle = Instance.new("TextLabel", LoginFrame)
+LTitle.Size = UDim2.new(1, 0, 0, 45)
+LTitle.Text = "LOGIN SCRIPT V6"
+LTitle.TextColor3 = Color3.fromRGB(0, 255, 150)
+LTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+LTitle.Font = Enum.Font.SourceSansBold
+LTitle.TextSize = 18
+
+local KeyInput = Instance.new("TextBox", LoginFrame)
+KeyInput.Size = UDim2.new(0.85, 0, 0, 40)
+KeyInput.Position = UDim2.new(0.075, 0, 0.35, 0)
+KeyInput.PlaceholderText = "INSIRA SUA KEY"
+KeyInput.Text = ""
+KeyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+KeyInput.TextColor3 = Color3.new(1, 1, 1)
+
+local EnterBtn = Instance.new("TextButton", LoginFrame)
+EnterBtn.Size = UDim2.new(0.85, 0, 0, 45)
+EnterBtn.Position = UDim2.new(0.075, 0, 0.65, 0)
+EnterBtn.Text = "ENTRAR NO SCRIPT"
+EnterBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+EnterBtn.TextColor3 = Color3.new(1, 1, 1)
+EnterBtn.Font = Enum.Font.SourceSansBold
+
+-- --- MENU PRINCIPAL (V6) ---
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 220, 0, 320)
+MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Visible = false
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.ClipsDescendants = true
+
+local TitleBar = Instance.new("Frame", MainFrame)
+TitleBar.Size = UDim2.new(1, 0, 0, 40)
+TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+
+local TitleText = Instance.new("TextLabel", TitleBar)
+TitleText.Size = UDim2.new(1, -70, 1, 0)
+TitleText.Position = UDim2.new(0, 10, 0, 0)
+TitleText.Text = "SCRIPT PVP ULTRA V6"
+TitleText.TextColor3 = Color3.fromRGB(0, 255, 150)
+TitleText.BackgroundTransparency = 1
+TitleText.TextXAlignment = Enum.TextXAlignment.Left
+
+local HideBtn = Instance.new("TextButton", TitleBar)
+HideBtn.Size = UDim2.new(0, 30, 0, 30)
+HideBtn.Position = UDim2.new(1, -35, 0, 5)
+HideBtn.Text = "-"
+HideBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+HideBtn.TextColor3 = Color3.new(1, 1, 1)
+
+local Content = Instance.new("Frame", MainFrame)
+Content.Position = UDim2.new(0, 0, 0, 45)
+Content.Size = UDim2.new(1, 0, 1, -45)
+Content.BackgroundTransparency = 1
+local UIList = Instance.new("UIListLayout", Content)
+UIList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIList.Padding = UDim.new(0, 5)
+
+-- Botões do Menu
+local function CreateBtn(txt)
+    local b = Instance.new("TextButton", Content)
+    b.Size = UDim2.new(0.9, 0, 0, 35)
+    b.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    b.TextColor3 = Color3.new(1, 1, 1)
+    b.Text = txt
+    return b
+end
+
+local AimBtn = CreateBtn("AIMBOT: OFF")
+local EspBtn = CreateBtn("ESP BOX/BRILHO: OFF")
+local TracerBtn = CreateBtn("LINHAS (TOP): OFF")
+local SizeFovBtn = CreateBtn("REGULAR FOV: 100")
+
+-- --- FOV VISUAL ---
+local FOVCircle = Instance.new("Frame", ScreenGui)
+FOVCircle.BackgroundColor3 = Color3.new(1, 1, 1)
+FOVCircle.BackgroundTransparency = 1
+FOVCircle.Size = UDim2.new(0, 200, 0, 200)
+FOVCircle.Position = UDim2.new(0.5, -100, 0.5, -100)
+FOVCircle.Visible = false
+local UIBorder = Instance.new("UIStroke", FOVCircle)
+UIBorder.Thickness = 1
+UIBorder.Color = Color3.new(1, 1, 1)
+Instance.new("UICorner", FOVCircle).CornerRadius = UDim.new(1, 0)
+
+-- --- LÓGICA ---
+local AimActive, EspActive, TracerActive = false, false, false
+local FovRadius = 100
+
+-- Login
+EnterBtn.MouseButton1Click:Connect(function()
+    if KeysValidas[KeyInput.Text] then
+        LoginFrame.Visible = false
+        MainFrame.Visible = true
+        FOVCircle.Visible = true
+    else
+        EnterBtn.Text = "KEY INCORRETA!"
+        EnterBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+        task.wait(1.5)
+        EnterBtn.Text = "ENTRAR NO SCRIPT"
+        EnterBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+    end
+end)
+
+-- Ocultar
+HideBtn.MouseButton1Click:Connect(function()
+    MainFrame:TweenSize(MainFrame.Size.Y.Offset > 40 and UDim2.new(0, 220, 0, 40) or UDim2.new(0, 220, 0, 320), "Out", "Quad", 0.3, true)
+end)
+
+-- PvP Toggles
+AimBtn.MouseButton1Click:Connect(function() AimActive = not AimActive; AimBtn.Text = "AIMBOT: "..(AimActive and "ON" or "OFF") end)
+EspBtn.MouseButton1Click:Connect(function() EspActive = not EspActive; EspBtn.Text = "ESP: "..(EspActive and "ON" or "OFF") end)
+TracerBtn.MouseButton1Click:Connect(function() TracerActive = not TracerActive; TracerBtn.Text = "LINHAS: "..(TracerActive and "ON" or "OFF") end)
+SizeFovBtn.MouseButton1Click:Connect(function()
+    FovRadius = FovRadius + 65
+    if FovRadius > 360 then FovRadius = 50 end
+    SizeFovBtn.Text = "REGULAR FOV: "..FovRadius
+    FOVCircle.Size = UDim2.new(0, FovRadius*2, 0, FovRadius*2)
+    FOVCircle.Position = UDim2.new(0.5, -FovRadius, 0.5, -FovRadius)
+end)
+
+-- Loop
+RunService.RenderStepped:Connect(function()
+    if not MainFrame.Visible then return end
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character then
+            local h = p.Character:FindFirstChild("Highlight")
+            if EspActive then
+                if not h then h = Instance.new("Highlight", p.Character) h.FillColor = Color3.new(1,0,0) end
+            elseif h then h:Destroy() end
+            local head = p.Character:FindFirstChild("Head")
+            if head then
+                local pos, vis = Camera:WorldToViewportPoint(head.Position)
+                local line = ScreenGui:FindFirstChild("T_"..p.Name)
+                if TracerActive and vis then
+                    if not line then line = Instance.new("Frame", ScreenGui) line.Name = "T_"..p.Name line.BackgroundColor3 = Color3.new(1,1,1) line.BorderSizePixel = 0 end
+                    line.Visible = true
+                    line.Size = UDim2.new(0, 1, 0, pos.Y)
+                    line.Position = UDim2.new(0, pos.X, 0, 0)
+                elseif line then line.Visible = false end
+            end
+        end
+    end
+    if AimActive then
+        local target = nil
+        local dist = FovRadius
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") then
+                local pos, vis = Camera:WorldToViewportPoint(p.Character.Head.Position)
+                if vis then
+                    local mag = (Vector2.new(pos.X, pos.Y) - Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)).Magnitude
+                    if mag < dist then target = p; dist = mag end
+                end
+            end
+        end
+        if target then Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Character.Head.Position) end
+    end
+end)
